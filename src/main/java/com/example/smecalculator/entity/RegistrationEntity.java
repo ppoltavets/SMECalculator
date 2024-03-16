@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 public class RegistrationEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen1")
     private Integer id;
 
     @Column

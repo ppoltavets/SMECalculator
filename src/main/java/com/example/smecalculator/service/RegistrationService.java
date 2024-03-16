@@ -1,9 +1,9 @@
-package service;
+package com.example.smecalculator.service;
 
 import com.example.smecalculator.entity.RegistrationEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repository.RegistrationRepository;
+import com.example.smecalculator.repository.RegistrationRepository;
 
 @Service
 public class RegistrationService implements IRegistrationService {

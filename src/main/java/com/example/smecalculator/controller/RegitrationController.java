@@ -1,4 +1,4 @@
-package controller;
+package com.example.smecalculator.controller;
 
 import com.example.smecalculator.entity.RegistrationEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.RegistrationService;
+import com.example.smecalculator.service.RegistrationService;
 
 @RestController
 @Slf4j
-@RequestMapping("api/registration")
+@RequestMapping("/api/registration")
 public class RegitrationController {
 
     @Autowired
@@ -48,6 +48,7 @@ public class RegitrationController {
         var foundUser = registrationService.findUser(login);
         if(foundUser == null)
             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response = new ResponseEntity<>(foundUser,HttpStatus.OK);
         return response;
     }
 }

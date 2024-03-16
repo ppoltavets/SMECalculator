@@ -1,4 +1,4 @@
-package service;
+package com.example.smecalculator.service;
 
 import com.example.smecalculator.entity.RegistrationEntity;
 import org.springframework.stereotype.Service;

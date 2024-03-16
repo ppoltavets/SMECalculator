@@ -1,4 +1,4 @@
-package repository;
+package com.example.smecalculator.repository;
 
 import com.example.smecalculator.entity.RegistrationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
