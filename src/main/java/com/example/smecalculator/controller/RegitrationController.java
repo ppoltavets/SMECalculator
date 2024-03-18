@@ -12,6 +12,7 @@ import com.example.smecalculator.service.RegistrationService;
 
 @RestController
 @Slf4j
+@CrossOrigin
 @RequestMapping("/api/registration")
 public class RegitrationController {
 
@@ -21,15 +22,15 @@ public class RegitrationController {
     Logger logger = LoggerFactory.getLogger(RegitrationController.class);
 
 
-    @PostMapping("/save-user")
+    @PostMapping("/save-user") // Регистрация пользователя, сохранение инфо в базу
     public ResponseEntity<String> saveUser(@RequestBody RegistrationEntity entity) {
         ResponseEntity<String> response = null;
         registrationService.addUser(entity);
-        response = new ResponseEntity<String>("success", HttpStatus.OK);
+        response = new ResponseEntity<String>("Sign-up success:",HttpStatus.OK);
         return response;
     }
 
-    @PostMapping("/login-user")
+    @PostMapping("/login-user") //
     public ResponseEntity<RegistrationEntity> loginUser(@RequestBody RegistrationEntity entryUser) {
         logger.info("Получен запрос");
         ResponseEntity<RegistrationEntity> response = null;
@@ -47,7 +48,7 @@ public class RegitrationController {
         ResponseEntity<RegistrationEntity> response = null;
         var foundUser = registrationService.findUser(login);
         if(foundUser == null)
-            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(HttpStatus.NOT_FOUND); // TODO: Проверка не работает надо будет подебажить
         response = new ResponseEntity<>(foundUser,HttpStatus.OK);
         return response;
     }
