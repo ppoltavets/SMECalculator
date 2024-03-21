@@ -40,4 +40,29 @@ public class RegistrationService implements IRegistrationService {
     public RegistrationEntity findUser(String login) {
         return repository.findAllByLogin(login);
     }
+
+    @Override
+    public RegistrationEntity returnUserInfo(String login) {
+        var clientInfo = repository.findAllByLogin(login);
+
+        return RegistrationEntity.builder()
+                .name(clientInfo.getName())
+                .surname(clientInfo.getSurname())
+                .companyName(clientInfo.getCompanyName())
+                .yield(clientInfo.getYield())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public RegistrationEntity addUserInfo(RegistrationEntity clientInfo) {
+        var prev = repository.findAllByLogin(clientInfo.getLogin());
+        prev.setName(clientInfo.getName());
+        prev.setSurname(clientInfo.getSurname());
+        prev.setCompanyName(clientInfo.getCompanyName());
+        prev.setYield(clientInfo.getYield());
+        repository.save(prev);
+        return null;
+    }
+
 }
