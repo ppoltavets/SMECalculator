@@ -1,6 +1,6 @@
 
 # Use an official OpenJDK runtime as the base image
-FROM --platform=$BUILDPLATFORM adoptium/temurin:17-jre-hotspot as build
+FROM --platform=$BUILDPLATFORM openjdk:17-oracle as build
 
 # Set the working directory
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN gradle dependencies
 # Run the Gradle build to create the Spring Boot jar file
 RUN ./gradlew bootJar
 
-FROM adoptopenjdk:17-jre-hotspot
+FROM openjdk:17-oracle
 
 WORKDIR /app
 
