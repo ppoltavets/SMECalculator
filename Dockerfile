@@ -11,6 +11,8 @@ COPY . /app
 # Copy the Gradle wrapper files
 COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.properties ./gradle/wrapper/
 
+RUN yum install findutils
+
 RUN chmod +x ./gradlew
 
 RUN ./gradlew dependencies
