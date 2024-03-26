@@ -31,4 +31,4 @@ COPY --from=build /app ./
 EXPOSE 8080
 
 # Run the Spring Boot application
-CMD ["java", "-jar", "build/libs/your-application-name.jar"]
+CMD ["java", "-jar", "build/libs/SMECalculator-1.0.0.jar"]
