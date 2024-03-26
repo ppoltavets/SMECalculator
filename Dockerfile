@@ -1,6 +1,6 @@
 
 # Use an official OpenJDK runtime as the base image
-FROM --platform=$BUILDPLATFORM amazoncorretto/17 as build
+FROM --platform=$BUILDPLATFORM amazoncorretto:17 as build
 
 # Set the working directory
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN ./gradlew dependencies
 # Run the Gradle build to create the Spring Boot jar file
 RUN ./gradlew bootJar
 
-FROM amazoncorretto/17
+FROM amazoncorretto:17
 
 WORKDIR /app
 
