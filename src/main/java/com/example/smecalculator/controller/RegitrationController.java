@@ -96,15 +96,16 @@ public class RegitrationController {
     }
 
 
-    @GetMapping("/account-info/{login}")
-    public ResponseEntity<RegistrationEntity> accountInfo(@PathVariable String login, HttpServletRequest request) {
+    @GetMapping("/account-info/")
+    public ResponseEntity<RegistrationEntity> accountInfo(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         ResponseEntity<RegistrationEntity> response = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("userCookie")) {
                     if (tokensService.validateCookie(cookie.getValue())) {
-                        var clientInfo = registrationService.returnUserInfo(login);
+                        var user = tokensService.findUser(cookie.getValue());
+                        var clientInfo = registrationService.returnUserInfo(user);
                         response = new ResponseEntity<>(clientInfo, HttpStatus.OK);
                         return response;
                     }

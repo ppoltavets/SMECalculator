@@ -24,4 +24,9 @@ public class TokensService implements ITokensService{
         repository.save(tokens);
     }
 
+    @Override
+    public String findUser(String cookie) {
+        return repository.findAllByToken(cookie).getUsername();
+    }
+
 }
