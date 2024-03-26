@@ -11,6 +11,8 @@ COPY . /app
 # Copy the Gradle wrapper files
 COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.properties ./gradle/wrapper/
 
+RUN chmod +x ./gradlew
+
 RUN ./gradlew dependencies
 
 # Run the Gradle build to create the Spring Boot jar file
