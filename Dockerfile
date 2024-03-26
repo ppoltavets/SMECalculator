@@ -1,6 +1,6 @@
 
 # Use an official OpenJDK runtime as the base image
-FROM --platform=$BUILDPLATFORM openjdk:17-oracle as build
+FROM --platform=$BUILDPLATFORM amazoncorretto/17 as build
 
 # Set the working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . /app
 # Copy the Gradle wrapper files
 COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.properties ./gradle/wrapper/
 
-RUN yum install findutils
+# RUN yum install findutils
 
 RUN chmod +x ./gradlew
 
@@ -20,7 +20,7 @@ RUN ./gradlew dependencies
 # Run the Gradle build to create the Spring Boot jar file
 RUN ./gradlew bootJar
 
-FROM openjdk:17-oracle
+FROM amazoncorretto/17
 
 WORKDIR /app
 
