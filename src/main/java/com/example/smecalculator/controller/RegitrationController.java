@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.smecalculator.service.RegistrationService;
 
 import java.io.IOException;
+import java.util.UUID;
 
 
 @RestController
@@ -77,7 +78,7 @@ public class RegitrationController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("userCookie")) {
-                    if (cookie.getValue().equals(login)) {
+                    if (tokensService.validateCookie(cookie.getValue())) {
                         var foundUser = registrationService.findUser(login);
                         if (foundUser == null) {
                             response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -102,7 +103,7 @@ public class RegitrationController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("userCookie")) {
-                    if (cookie.getValue().equals(login)) {
+                    if (tokensService.validateCookie(cookie.getValue())) {
                         var clientInfo = registrationService.returnUserInfo(login);
                         response = new ResponseEntity<>(clientInfo, HttpStatus.OK);
                         return response;
@@ -121,23 +122,28 @@ public class RegitrationController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("userCookie")) {
-                    if (cookie.getValue().equals(updateInfo.getLogin())) {
+                    if (tokensService.validateCookie(cookie.getValue())) {
                         registrationService.addUserInfo(updateInfo);
                         response = new ResponseEntity<>(HttpStatus.OK);
                     }
                 }
             }
         }
+        response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return response;
     }
 
     @GetMapping(value = "/set-cookie")
     public ResponseEntity<?> setCookie(String login, HttpServletResponse response) throws IOException {
-        Cookie cookie = new Cookie("userCookie", login);
+        var token = UUID.randomUUID().toString();
+        Cookie cookie = new Cookie("userCookie", token);
         cookie.setPath("/");
         cookie.setMaxAge(86400);
         response.addCookie(cookie);
         response.setContentType("text/plain");
+        var saveToken = TokensEntity.builder().username(login).token(token)
+                .build();
+        tokensService.addCookie(saveToken);
         return ResponseEntity.ok().body(HttpStatus.OK);
     }
 }
