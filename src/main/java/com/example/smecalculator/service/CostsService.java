@@ -2,7 +2,6 @@ package com.example.smecalculator.service;
 
 import com.example.smecalculator.entity.CostsEntity;
 import com.example.smecalculator.repository.CostsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,7 +23,7 @@ public class CostsService implements ICostsService {
     public Map<LocalDate, CostsEntity> getCosts(String login) {
         Map<LocalDate, CostsEntity> costs = new HashMap<>();
         var foundCosts = repository.findByLogin(login);
-        for (int a = 0; a <= foundCosts.size(); a++)
+        for (int a = 0; a < foundCosts.size(); a++)
         {
             costs.put(foundCosts.get(a).getDate(), foundCosts.get(a));
         }

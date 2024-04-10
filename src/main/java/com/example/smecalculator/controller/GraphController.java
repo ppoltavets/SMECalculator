@@ -33,7 +33,7 @@ public class GraphController {
 
 
     @PostMapping("/save-costs")
-    public ResponseEntity<CostsEntity> saveCost(CostsEntity costs, HttpServletRequest request) {
+    public ResponseEntity<CostsEntity> saveCost(@RequestBody CostsEntity costs, HttpServletRequest request) {
         var cookieChecker = findCookieUser(request);
         if (cookieChecker.getStatusCode().equals(HttpStatus.OK)) {
             costs.setLogin(cookieChecker.getBody());
@@ -60,8 +60,7 @@ public class GraphController {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("userCookie")) {
                     if (tokensService.validateCookie(cookie.getValue()))
-                        tokensService.findUser(cookie.getValue());
-                    return new ResponseEntity<>(tokensService.findUser(cookie.getValue()), HttpStatus.OK);
+                        return new ResponseEntity<>(tokensService.findUser(cookie.getValue()), HttpStatus.OK);
                 }
             }
         }
