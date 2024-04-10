@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +35,9 @@ public class RegitrationController {
 
     Logger logger = LoggerFactory.getLogger(RegitrationController.class);
 
+
+    //TODO: Сделать проверку на то что пользователь уже был зарегистрирован, рискуем получить дубли в бд и потом при поиске поймаем 500
+    //TODO: Можно сделать метод который будет убирать это ужасное ветвление и просто будет брать сервлетку из основного метода и по ней искать куку и выводить тру фолс
 
     @PostMapping("/save-user") // Регистрация пользователя, сохранение инфо в базу
     public ResponseEntity<String> saveUser(@RequestBody RegistrationEntity entity) {
