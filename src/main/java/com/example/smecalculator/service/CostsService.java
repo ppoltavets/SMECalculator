@@ -1,6 +1,7 @@
 package com.example.smecalculator.service;
 
 import com.example.smecalculator.entity.CostsEntity;
+import com.example.smecalculator.entity.DateEntity;
 import com.example.smecalculator.repository.CostsRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class CostsService implements ICostsService {
     @Override
     public Map<LocalDate, CostsEntity> getCosts(String login) {
         Map<LocalDate, CostsEntity> costs = new HashMap<>();
-        var foundCosts = repository.findByLogin(login);
+        var foundCosts = repository.findByLoginOrderByDate(login);
         for (int a = 0; a < foundCosts.size(); a++)
         {
             costs.put(foundCosts.get(a).getDate(), foundCosts.get(a));

@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CostsRepository extends JpaRepository<CostsEntity, String> {
 
-    List<CostsEntity> findByLogin(String login);
+    List<CostsEntity> findByLoginOrderByDate(String login);
 
     CostsEntity findByLoginAndDate(String login, LocalDate date);
 }

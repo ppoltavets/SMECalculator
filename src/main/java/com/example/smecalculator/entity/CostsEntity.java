@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @Table(schema = "public", name = "costs")
 public class CostsEntity {
 
-    @Id
     @Column
     private String login;
 
@@ -42,6 +41,7 @@ public class CostsEntity {
     @Column
     private Double patent;
 
+    @Id
     @Column
     private LocalDate date;
 

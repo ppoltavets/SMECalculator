@@ -8,6 +8,7 @@ class SmeCalculatorApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }
