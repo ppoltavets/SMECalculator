@@ -37,7 +37,6 @@ public class RegitrationController {
 
 
     //TODO: Сделать проверку на то что пользователь уже был зарегистрирован, рискуем получить дубли в бд и потом при поиске поймаем 500
-    //TODO: Можно сделать метод который будет убирать это ужасное ветвление и просто будет брать сервлетку из основного метода и по ней искать куку и выводить тру фолс
 
     @PostMapping("/save-user") // Регистрация пользователя, сохранение инфо в базу
     public ResponseEntity<String> saveUser(@RequestBody RegistrationEntity entity) {
@@ -136,7 +135,33 @@ public class RegitrationController {
         return response;
     }
 
-    @GetMapping(value = "/set-cookie")
+    @PostMapping("/account-info/set-password")
+    public ResponseEntity<RegistrationEntity> updatePassword(@RequestBody RegistrationEntity updateInfo,HttpServletRequest request) {
+        ResponseEntity<RegistrationEntity> response = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userCookie")) {
+                    if (tokensService.validateCookie(cookie.getValue())) {
+                        var foundUser = registrationService.findUser(tokensService.findUser(cookie.getValue()));
+                        if (foundUser == null) {
+                            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                        } else {
+                            registrationService.updatePassword(foundUser.getLogin(),updateInfo.getPassword());
+                            response = new ResponseEntity<>(foundUser, HttpStatus.OK);
+                        }
+                        return response;
+                    }
+                }
+            }
+        }
+
+        response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return response;
+    }
+
+        @GetMapping(value = "/set-cookie")
     public ResponseEntity<?> setCookie(String login, HttpServletResponse response) throws IOException {
         var token = UUID.randomUUID().toString();
         Cookie cookie = new Cookie("userCookie", token);

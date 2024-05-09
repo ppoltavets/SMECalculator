@@ -29,12 +29,10 @@ public class GraphController {
 
     Logger logger = LoggerFactory.getLogger(RegitrationController.class);
 
-    //TODO: СДЕЛАТЬ ПОЛЕ SUM в базе, разнести заполнение по колонкам как было и в sum хранить сумму
-
-
 
     @PostMapping("/save-costs")
     public ResponseEntity<CostsEntity> saveCost(@RequestBody CostsEntity costs, HttpServletRequest request) {
+        logger.info("Получен запрос на сохранение в таблицу costs");
         var cookieChecker = findCookieUser(request);
         if (cookieChecker.getStatusCode().equals(HttpStatus.OK)) {
             costs.setLogin(cookieChecker.getBody());
@@ -46,6 +44,7 @@ public class GraphController {
 
     @GetMapping("/get-costs")
     public ResponseEntity<?> getCosts(HttpServletRequest request){
+        logger.info("Получен запрос на получение Cost'ов");
         var cookieCheker = findCookieUser(request);
         if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
             costsService.getCosts(cookieCheker.getBody());

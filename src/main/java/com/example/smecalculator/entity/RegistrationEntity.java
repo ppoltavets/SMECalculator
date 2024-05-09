@@ -15,9 +15,6 @@ import java.math.BigDecimal;
 public class RegistrationEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen1")
-    private Integer id;
-
     @Column
     private String login;
 

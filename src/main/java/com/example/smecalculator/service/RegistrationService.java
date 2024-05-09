@@ -65,4 +65,11 @@ public class RegistrationService implements IRegistrationService {
         return null;
     }
 
+    @Override
+    public void updatePassword(String login, String newPassword) {
+        var user= repository.findAllByLogin(login);
+        user.setPassword(newPassword);
+        repository.save(user);
+    }
+
 }

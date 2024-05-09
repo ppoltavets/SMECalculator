@@ -17,4 +17,6 @@ public interface IRegistrationService {
     public RegistrationEntity returnUserInfo(String login);
 
     public RegistrationEntity addUserInfo(RegistrationEntity login);
+
+    public void updatePassword(String login, String newPassword);
 }
