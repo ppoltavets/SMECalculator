@@ -127,6 +127,7 @@ public class RegitrationController {
                     if (tokensService.validateCookie(cookie.getValue())) {
                         registrationService.addUserInfo(updateInfo);
                         response = new ResponseEntity<>(HttpStatus.OK);
+                        return response;
                     }
                 }
             }
