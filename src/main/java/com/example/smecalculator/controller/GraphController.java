@@ -1,13 +1,7 @@
 package com.example.smecalculator.controller;
 
-import com.example.smecalculator.entity.BalanceEntity;
-import com.example.smecalculator.entity.CashFlowEntity;
-import com.example.smecalculator.entity.CostsEntity;
-import com.example.smecalculator.entity.DateEntity;
-import com.example.smecalculator.service.BalanceService;
-import com.example.smecalculator.service.CashFlowService;
-import com.example.smecalculator.service.CostsService;
-import com.example.smecalculator.service.TokensService;
+import com.example.smecalculator.entity.*;
+import com.example.smecalculator.service.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +29,9 @@ public class GraphController {
     private CashFlowService cashFlowService;
 
     @Autowired
+    private OpBudgetService opBudgetService;
+
+    @Autowired
     private TokensService tokensService;
 
     Logger logger = LoggerFactory.getLogger(RegitrationController.class);
@@ -57,7 +54,7 @@ public class GraphController {
         logger.info("Получен запрос на получение Cost'ов");
         var cookieCheker = findCookieUser(request);
         if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
-            costsService.getCosts(cookieCheker.getBody());
+            costsService.getCosts(cookieCheker.getBody()); // TODO: Зачем эта строчка? Может выпилить)?
             return new ResponseEntity<>(costsService.getCosts(cookieCheker.getBody()), HttpStatus.OK);
         }
         return null;
@@ -119,6 +116,29 @@ public class GraphController {
         if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
             cashFlowService.getCashFlow(cookieCheker.getBody());
             return new ResponseEntity<>(cashFlowService.getCashFlow(cookieCheker.getBody()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/save-opbudget")
+    public ResponseEntity<OperationalBudgetEntity> saveCost(@RequestBody OperationalBudgetEntity operationalBudget, HttpServletRequest request) {
+        logger.info("Получен запрос на сохранение в таблицу operational_budget");
+        var cookieChecker = findCookieUser(request);
+        if (cookieChecker.getStatusCode().equals(HttpStatus.OK)) {
+            operationalBudget.setLogin(cookieChecker.getBody());
+            opBudgetService.saveOpBudget(operationalBudget);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/get-opbudget")
+    public ResponseEntity<?> getOpBudget(HttpServletRequest request){
+        logger.info("Получен запрос на получение operational_budget'ов");
+        var cookieCheker = findCookieUser(request);
+        if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
+            opBudgetService.getOpBudget(cookieCheker.getBody());
+            return new ResponseEntity<>(opBudgetService.getOpBudget(cookieCheker.getBody()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
