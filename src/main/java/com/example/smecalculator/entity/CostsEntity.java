@@ -27,7 +27,6 @@ public class CostsEntity {
 
     @Column
     @Builder.Default
-
     private Double bonus = 0.0;
 
     @Column(name = "salary_taxes")
