@@ -1,7 +1,9 @@
 package com.example.smecalculator.controller;
 
+import com.example.smecalculator.entity.BalanceEntity;
 import com.example.smecalculator.entity.CostsEntity;
 import com.example.smecalculator.entity.DateEntity;
+import com.example.smecalculator.service.BalanceService;
 import com.example.smecalculator.service.CostsService;
 import com.example.smecalculator.service.TokensService;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -23,6 +25,9 @@ import java.util.Map;
 public class GraphController {
     @Autowired
     private CostsService costsService;
+
+    @Autowired
+    private BalanceService balanceService;
 
     @Autowired
     private TokensService tokensService;
@@ -65,6 +70,29 @@ public class GraphController {
             }
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/save-balance")
+    public ResponseEntity<BalanceEntity> saveCost(@RequestBody BalanceEntity balance, HttpServletRequest request) {
+        logger.info("Получен запрос на сохранение в таблицу balance");
+        var cookieChecker = findCookieUser(request);
+        if (cookieChecker.getStatusCode().equals(HttpStatus.OK)) {
+            balance.setLogin(cookieChecker.getBody());
+            balanceService.saveBalance(balance);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/get-balance")
+    public ResponseEntity<?> getBalance(HttpServletRequest request){
+        logger.info("Получен запрос на получение Balance'ов");
+        var cookieCheker = findCookieUser(request);
+        if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
+            balanceService.getBalance(cookieCheker.getBody());
+            return new ResponseEntity<>(balanceService.getBalance(cookieCheker.getBody()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
