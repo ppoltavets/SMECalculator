@@ -1,9 +1,11 @@
 package com.example.smecalculator.controller;
 
 import com.example.smecalculator.entity.BalanceEntity;
+import com.example.smecalculator.entity.CashFlowEntity;
 import com.example.smecalculator.entity.CostsEntity;
 import com.example.smecalculator.entity.DateEntity;
 import com.example.smecalculator.service.BalanceService;
+import com.example.smecalculator.service.CashFlowService;
 import com.example.smecalculator.service.CostsService;
 import com.example.smecalculator.service.TokensService;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,6 +30,9 @@ public class GraphController {
 
     @Autowired
     private BalanceService balanceService;
+
+    @Autowired
+    private CashFlowService cashFlowService;
 
     @Autowired
     private TokensService tokensService;
@@ -91,6 +96,29 @@ public class GraphController {
         if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
             balanceService.getBalance(cookieCheker.getBody());
             return new ResponseEntity<>(balanceService.getBalance(cookieCheker.getBody()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/save-cashflow")
+    public ResponseEntity<CashFlowEntity> saveCost(@RequestBody CashFlowEntity cashFlow, HttpServletRequest request) {
+        logger.info("Получен запрос на сохранение в таблицу cash_flow");
+        var cookieChecker = findCookieUser(request);
+        if (cookieChecker.getStatusCode().equals(HttpStatus.OK)) {
+            cashFlow.setLogin(cookieChecker.getBody());
+            cashFlowService.saveCashFlow(cashFlow);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/get-cashflow")
+    public ResponseEntity<?> getCashFlow(HttpServletRequest request){
+        logger.info("Получен запрос на получение cash_flow'ов");
+        var cookieCheker = findCookieUser(request);
+        if(cookieCheker.getStatusCode().equals(HttpStatus.OK)){
+            cashFlowService.getCashFlow(cookieCheker.getBody());
+            return new ResponseEntity<>(cashFlowService.getCashFlow(cookieCheker.getBody()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
